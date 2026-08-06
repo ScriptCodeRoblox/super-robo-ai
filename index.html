@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SuperRoboAI - Public Beta</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; background: #f0f0f0; }
+        input { width: 300px; padding: 10px; }
+        button { padding: 10px; background: #00a2ff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🤖 SuperRoboAI</h1>
+    <p>Herramienta open-source para Roblox Studio</p>
+    
+    <h3>Tu ID de Sesión: <span id="sessionId"></span></h3>
+    <p>Copia este ID en el plugin de Roblox Studio.</p>
+    
+    <input type="text" id="prompt" placeholder="Ej: Crea un bloque rojo">
+    <button onclick="enviar()">Enviar a Studio</button>
+    
+    <p id="status"></p>
+
+    <script>
+        const sessionId = Math.random().toString(36).substring(7);
+        document.getElementById('sessionId').innerText = sessionId;
+
+        async function enviar() {
+            const prompt = document.getElementById('prompt').value;
+            document.getElementById('status').innerText = "Enviando...";
+            
+            const response = await fetch('/api/enviar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId: sessionId, prompt: prompt })
+            });
+            const data = await response.json();
+            document.getElementById('status').innerText = data.message;
+        }
+    </script>
+</body>
+</html>
